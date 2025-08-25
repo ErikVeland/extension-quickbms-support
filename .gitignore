@@ -2,3 +2,4 @@ dist
 dl
 node_modules
 out
+.DS_Store
