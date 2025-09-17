@@ -17,7 +17,7 @@ class QBMSAttribDashlet extends PureComponentEx<{}, {}> {
       >
         <div>
           {t('Special thanks to {{author}} for developing this tool',
-          { replace: { author: 'Luigi Auriemma' }})}
+             { replace: { author: 'Luigi Auriemma' }})}
         </div>
         <div>
           {t('You can find the QBMS home page: ')}
@@ -33,4 +33,4 @@ class QBMSAttribDashlet extends PureComponentEx<{}, {}> {
 }
 
 export default withTranslation(['common', 'qbms-support'])
-  (QBMSAttribDashlet as any) as React.ComponentClass<{}>;
+(QBMSAttribDashlet as any) as React.ComponentClass<{}>;

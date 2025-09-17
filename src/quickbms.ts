@@ -121,9 +121,9 @@ function run(command: string, parameters: string[], options: IQBMSOptions): Prom
     // const theCommand = path.join(__dirname, 'quickbms_4gb_files.exe') + args.join(' ');
     try {
       process = spawn(quote(path.join(__dirname, 'quickbms_4gb_files.exe')),
-      args, {
-        shell: true,
-      });
+                      args, {
+                        shell: true,
+                      });
     } catch (err) {
       return reject(err);
     }
@@ -242,8 +242,8 @@ function run(command: string, parameters: string[], options: IQBMSOptions): Prom
 function createFiltersFile(wildCards: string[]): Promise<void> {
   return fs.ensureDirAsync(path.dirname(FILTER_FILE_PATH))
     .then(() => fs.writeFileAsync(FILTER_FILE_PATH, wildCards.join('\n'))
-    .then(() => Promise.resolve())
-    .catch(err => Promise.reject(err)));
+      .then(() => Promise.resolve())
+      .catch(err => Promise.reject(err)));
 }
 
 function removeFiltersFile(): Promise<void> {
@@ -264,7 +264,7 @@ function reImport(props: IQBMSOpProps): Promise<void> {
       ? Promise.resolve()
       : Promise.reject(new util.ArgumentInvalid('Re-import version was not specified')))
     .then(() => run('w',
-      [ quote(bmsScriptPath), quote(archivePath), quote(operationPath) ], qbmsOptions))
+                    [ quote(bmsScriptPath), quote(archivePath), quote(operationPath) ], qbmsOptions))
     .then(() => removeFiltersFile());
 }
 
@@ -275,7 +275,7 @@ function extract(props: IQBMSOpProps): Promise<void> {
       ? createFiltersFile(qbmsOptions.wildCards)
       : undefined)
     .then(() => run(undefined,
-      [ quote(bmsScriptPath), quote(archivePath), quote(operationPath) ], qbmsOptions))
+                    [ quote(bmsScriptPath), quote(archivePath), quote(operationPath) ], qbmsOptions))
     .then(() => removeFiltersFile());
 }
 
@@ -286,7 +286,7 @@ function list(props: IQBMSOpProps): Promise<IListEntry[]> {
       ? createFiltersFile(qbmsOptions.wildCards)
       : Promise.resolve())
     .then(() => run('l',
-      [ quote(bmsScriptPath), quote(archivePath), quote(operationPath) ], qbmsOptions))
+                    [ quote(bmsScriptPath), quote(archivePath), quote(operationPath) ], qbmsOptions))
     .then(() => removeFiltersFile())
     .then(() => fs.readFileAsync(LOG_FILE_PATH, { encoding: 'utf-8' }))
     .then(data => {
@@ -299,7 +299,7 @@ function write(props: IQBMSOpProps): Promise<void> {
   const { archivePath, bmsScriptPath, qbmsOptions, operationPath } = props;
   return validateArguments(archivePath, bmsScriptPath, operationPath, qbmsOptions)
     .then(() => run('w',
-      [ quote(bmsScriptPath), quote(archivePath), quote(operationPath) ], qbmsOptions));
+                    [ quote(bmsScriptPath), quote(archivePath), quote(operationPath) ], qbmsOptions));
 }
 
 module.exports = {

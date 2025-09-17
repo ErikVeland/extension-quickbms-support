@@ -27,6 +27,6 @@ try {
   download(QUICK_BMS_URL, () => {
     seven.extract(path.basename(QUICK_BMS_URL), 'dist', { raw: [ 'quickbms_4gb_files.exe' ] })
       .then(() => fs.unlinkSync(path.basename(QUICK_BMS_URL)))
-        .catch(err => console.error(err));
+      .catch(err => console.error(err));
   });
 }

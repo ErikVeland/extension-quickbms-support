@@ -2,7 +2,7 @@ import path from 'path';
 
 import AttribDashlet from './AttribDashlet';
 import { IAttachmentData, IListEntry, IQBMSOpProps, IQBMSOptions,
-  QBMSOperationType, QuickBMSError, UnregisteredGameError } from './types';
+         QBMSOperationType, QuickBMSError, UnregisteredGameError } from './types';
 
 import { fs, log, selectors, types, util } from 'vortex-api';
 
@@ -91,7 +91,7 @@ async function errorHandler(api: types.IExtensionApi,
       if (_GAMEMODE_SUPPORTED) {
         if (props.quiet !== true) {
           api.showErrorNotification('failed to execute qbms operation', err,
-            { allowReport: contributed !== undefined, attachments });
+                                    { allowReport: contributed !== undefined, attachments });
         }
 
         if (callback) {
@@ -170,7 +170,7 @@ function reImport(context: types.IExtensionContext, props: IQBMSOpProps) {
 function raiseDeprecatedAPINotification(context: types.IExtensionContext) {
   const state = context.api.store.getState();
   const notifications = util.getSafe(state,
-    ['session', 'notifications', 'notifications'], []);
+                                     ['session', 'notifications', 'notifications'], []);
   if (notifications.find(not => not.id === DEPRECATED_NOTIF_ID) === undefined) {
     context.api.sendNotification({
       id: DEPRECATED_NOTIF_ID,
@@ -181,10 +181,10 @@ function raiseDeprecatedAPINotification(context: types.IExtensionContext) {
         {
           title: 'More',
           action: () => context.api.showDialog('info', 'Deprecated QB API',
-          {
-            text: 'This extension is using deprecated QBMS API calls which will eventually be removed - '
+                                               {
+                                                 text: 'This extension is using deprecated QBMS API calls which will eventually be removed - '
                 + 'please inform the extension developer to update it ASAP!',
-          }, [{ label: 'Close' }]),
+                                               }, [{ label: 'Close' }]),
         },
       ],
     });
@@ -193,7 +193,7 @@ function raiseDeprecatedAPINotification(context: types.IExtensionContext) {
 
 function init(context: types.IExtensionContext) {
   context.registerDashlet('QBMS Support', 1, 2, 250, AttribDashlet,
-    showAttrib, () => ({}), undefined);
+                          showAttrib, () => ({}), undefined);
 
   context.registerAPI('qbmsRegisterGame', (gameMode: string) => {
     GAME_SUPPORT.push(gameMode);
@@ -221,37 +221,37 @@ function init(context: types.IExtensionContext) {
       options: IQBMSOptions,
       callback: (err: Error, data: IListEntry[]) => void) => {
         // Leaving this here temporarily for backwards compatibility
-        raiseDeprecatedAPINotification(context);
+      raiseDeprecatedAPINotification(context);
 
-        const state = context.api.store.getState();
-        const activeGameId = selectors.activeGameId(state);
-        const props: IQBMSOpProps = {
-          gameMode: activeGameId,
-          bmsScriptPath,
-          archivePath,
-          operationPath: inPath,
-          qbmsOptions: options,
-          callback,
-        };
+      const state = context.api.store.getState();
+      const activeGameId = selectors.activeGameId(state);
+      const props: IQBMSOpProps = {
+        gameMode: activeGameId,
+        bmsScriptPath,
+        archivePath,
+        operationPath: inPath,
+        qbmsOptions: options,
+        callback,
+      };
 
-        if (!GAME_SUPPORT.includes(activeGameId)) {
+      if (!GAME_SUPPORT.includes(activeGameId)) {
           // Not a registered game.
-          return testGameRegistered(props)
-            .catch(err => errorHandler(context.api, props, err));
-        }
+        return testGameRegistered(props)
+          .catch(err => errorHandler(context.api, props, err));
+      }
 
-        switch (opType) {
-          case 'extract':
-            return extract(context, props);
-          case 'reimport':
-            return reImport(context, props);
-          case 'write':
-            return write(context, props);
-          case 'list':
-          default:
-            return list(context, props);
-        }
-      });
+      switch (opType) {
+        case 'extract':
+          return extract(context, props);
+        case 'reimport':
+          return reImport(context, props);
+        case 'write':
+          return write(context, props);
+        case 'list':
+        default:
+          return list(context, props);
+      }
+    });
   });
 
   return true;
